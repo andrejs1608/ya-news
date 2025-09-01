@@ -1,6 +1,7 @@
 from django.conf import settings
+from django.contrib.auth import logout
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.views import generic
 
@@ -12,6 +13,7 @@ class NewsList(generic.ListView):
     """Список новостей."""
     model = News
     template_name = 'news/home.html'
+    context_object_name = 'news_feed'
 
     def get_queryset(self):
         """
@@ -102,3 +104,9 @@ class CommentUpdate(CommentBase, generic.UpdateView):
 class CommentDelete(CommentBase, generic.DeleteView):
     """Удаление комментария."""
     template_name = 'news/delete.html'
+
+
+def logout_view(request):
+    """Выход пользователя из системы."""
+    logout(request)
+    return render(request, 'registration/logout.html')
