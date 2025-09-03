@@ -1,5 +1,7 @@
 import pytest
+
 from django.urls import reverse
+
 from pytest_lazy_fixtures import lf
 
 
