@@ -54,3 +54,17 @@ def comments(author, news):
             news=news,
         ) for i in range(2)
     ]
+
+
+@pytest.fixture
+def news_edit_url(news):
+    return reverse('news:edit', args=(news.id,))
+
+@pytest.fixture
+def comments_url(news):
+    return reverse('news:detail', args=(news.id,)) + '#comments'
+
+
+@pytest.fixture
+def comment_delete_url(comment):
+    return reverse('news:delete', args=(comment.id,))
