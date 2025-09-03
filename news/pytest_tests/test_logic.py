@@ -10,6 +10,7 @@ from news.models import Comment
 def test_user_can_create_comment(
         author_client, author, news
 ):
+    """Проверка создания комментария авторизованным пользователем."""
     initial_comments_count = Comment.objects.count()
     url = reverse('news:detail', args=(news.id,))
     response = author_client.post(url, data={'text': 'comment'})
@@ -24,6 +25,7 @@ def test_user_can_create_comment(
 def test_unauthorized_user_cannot_create_comment(
         client, news
 ):
+    """Проверка что неавторизованный пользователь не может создать комментарий."""
     initial_comments_count = Comment.objects.count()
     url = reverse('news:detail', args=(news.id,))
     response = client.post(url, data={'text': 'comment'}, follow=True)
@@ -36,6 +38,7 @@ def test_unauthorized_user_cannot_create_comment(
 def test_comment_with_bad_words_is_not_added(
         author_client, news, bad_word
 ):
+    """Проверка что комментарий с плохими словами не добавляется."""
     initial_comments_count = Comment.objects.count()
     url = reverse('news:detail', args=(news.id,))
     bad_words_data = {'text': f'Этот комментарий содержит слово {bad_word}'}
@@ -52,6 +55,7 @@ def test_comment_with_bad_words_is_not_added(
 def test_author_can_edit_comment(
         author_client, comment, news_edit_url, comments_url
 ):
+    """Проверка что автор может редактировать свой комментарий."""
     response = author_client.post(
         news_edit_url,
         data={'text': 'Отредактированный комментарий'},
@@ -65,6 +69,7 @@ def test_author_can_edit_comment(
 def test_unauthorized_user_cant_edit_comment(
         client, comment, news_edit_url
 ):
+    """Проверка что неавторизованный пользователь не может редактировать комментарий."""
     response = client.post(
         news_edit_url,
         data={'text': 'Отредактированный комментарий'},
@@ -76,7 +81,10 @@ def test_unauthorized_user_cant_edit_comment(
     assert comment.text != 'Отредактированный комментарий'
 
 
-def test_author_can_delete_comment(author_client, comment_delete_url, comments_url):
+def test_author_can_delete_comment(
+        author_client, comment_delete_url, comments_url
+):
+    """Проверка что автор может удалить свой комментарий."""
     initial_comments_count = Comment.objects.count()
     response = author_client.post(
         comment_delete_url,
@@ -89,6 +97,7 @@ def test_author_can_delete_comment(author_client, comment_delete_url, comments_u
 def test_unauthorized_user_cant_delete_comment(
         client, comment_delete_url
 ):
+    """Проверка что неавторизованный пользователь не может удалить комментарий."""
     initial_comments_count = Comment.objects.count()
     response = client.post(
         comment_delete_url,
